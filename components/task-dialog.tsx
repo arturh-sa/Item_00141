@@ -127,13 +127,17 @@ export default function TaskDialog({open, onOpenChange, task, onClose}: TaskDial
             // Ensure we're passing the ID for updating
             const updatedTask = {...taskData, id: task.id}
             updateTask(updatedTask)
-            toast.success("Task updated", {
+            toast("Task updated", {
                 description: `"${values.name}" has been updated in your schedule.`,
+                className: "bg-background text-foreground border border-border",
+                descriptionClassName: "text-muted-foreground",
             })
         } else {
             addTask(taskData)
-            toast.success("Task created", {
+            toast("Task created", {
                 description: `"${values.name}" has been added to your schedule.`,
+                className: "bg-background text-foreground border border-border",
+                descriptionClassName: "text-muted-foreground",
             })
         }
 
@@ -153,150 +157,158 @@ export default function TaskDialog({open, onOpenChange, task, onClose}: TaskDial
     return (
         <>
             <Dialog open={open} onOpenChange={onOpenChange}>
-                <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
+                <DialogContent
+                    className="sm:max-w-[500px] h-[calc(100dvh-40px)] flex flex-col max-h-[calc(100dvh-40px)] p-0">
+                    <DialogHeader className="px-4 pt-4 pb-2">
                         <DialogTitle>{isEditing ? "Edit Task" : "Add New Task"}</DialogTitle>
                         <DialogDescription>
                             {isEditing ? "Update your cleaning task details below." : "Create a new cleaning task for your schedule."}
                         </DialogDescription>
                     </DialogHeader>
 
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Task Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Vacuum living room" {...field} />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="description"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Description (Optional)</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder="Include any specific details about this task"
-                                                {...field}
-                                                value={field.value || ""}
-                                            />
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="room"
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel>Room</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value}>
+                    <div className="overflow-y-auto flex-1 px-4 pb-2">
+                        <Form {...form}>
+                            <form id="task-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>Task Name</FormLabel>
                                             <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a room"/>
-                                                </SelectTrigger>
+                                                <Input placeholder="Vacuum living room" {...field} />
                                             </FormControl>
-                                            <SelectContent>
-                                                {rooms.map((room) => (
-                                                    <SelectItem key={room.value} value={room.value}>
-                                                        {room.label}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
 
-                            <FormField
-                                control={form.control}
-                                name="day"
-                                render={({field}) => (
-                                    <FormItem className="space-y-3">
-                                        <FormLabel>Day</FormLabel>
-                                        <FormDescription>Select the day when this task should be done.</FormDescription>
-                                        <FormControl>
-                                            <RadioGroup
-                                                onValueChange={field.onChange}
-                                                value={field.value}
-                                                className="grid grid-cols-2 sm:grid-cols-4 gap-2"
-                                            >
-                                                {days.map((day) => (
-                                                    <FormItem key={day.value}
-                                                              className="flex items-center space-x-2 space-y-0">
-                                                        <FormControl>
-                                                            <RadioGroupItem value={day.value} id={`day-${day.value}`}/>
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal cursor-pointer"
-                                                                   htmlFor={`day-${day.value}`}>
-                                                            {day.label}
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                ))}
-                                            </RadioGroup>
-                                        </FormControl>
-                                        <FormMessage/>
-                                    </FormItem>
-                                )}
-                            />
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>Description (Optional)</FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="Include any specific details about this task"
+                                                    {...field}
+                                                    value={field.value || ""}
+                                                    rows={3}
+                                                />
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
 
-                            <NotificationSettings
-                                control={form.control}
-                                notificationTime={form.watch("notificationTime")}
-                                notificationMethod={form.watch("notificationMethod")}
-                            />
+                                <FormField
+                                    control={form.control}
+                                    name="room"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>Room</FormLabel>
+                                            <Select onValueChange={field.onChange} value={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a room"/>
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent position="popper">
+                                                    {rooms.map((room) => (
+                                                        <SelectItem key={room.value} value={room.value}>
+                                                            {room.label}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
 
-                            {/* Updated footer with improved mobile layout */}
-                            <div className="flex flex-row items-center justify-between pt-2">
-                                {isEditing ? (
-                                    <>
-                                        <Button
-                                            type="button"
-                                            variant="destructive"
-                                            size="sm"
-                                            onClick={handleDeleteClick}
-                                            className="flex items-center gap-1"
-                                        >
-                                            <Trash2 className="h-4 w-4"/>
-                                            <span className="sm:inline">Delete</span>
+                                <FormField
+                                    control={form.control}
+                                    name="day"
+                                    render={({field}) => (
+                                        <FormItem className="space-y-3">
+                                            <FormLabel>Day</FormLabel>
+                                            <FormDescription>Select the day when this task should be
+                                                done.</FormDescription>
+                                            <FormControl>
+                                                <RadioGroup
+                                                    onValueChange={field.onChange}
+                                                    value={field.value}
+                                                    className="grid grid-cols-2 sm:grid-cols-4 gap-2"
+                                                >
+                                                    {days.map((day) => (
+                                                        <FormItem key={day.value}
+                                                                  className="flex items-center space-x-2 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value={day.value}
+                                                                                id={`day-${day.value}`}/>
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal cursor-pointer"
+                                                                       htmlFor={`day-${day.value}`}>
+                                                                {day.label}
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                    ))}
+                                                </RadioGroup>
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <NotificationSettings
+                                    control={form.control}
+                                    notificationTime={form.watch("notificationTime")}
+                                    notificationMethod={form.watch("notificationMethod")}
+                                />
+                            </form>
+                        </Form>
+                    </div>
+
+                    {/* Fixed footer with buttons */}
+                    <div className="border-t p-4 mt-auto">
+                        <div className="flex flex-row items-center justify-between">
+                            {isEditing ? (
+                                <>
+                                    <Button
+                                        type="button"
+                                        variant="destructive"
+                                        size="sm"
+                                        onClick={handleDeleteClick}
+                                        className="flex items-center gap-1"
+                                    >
+                                        <Trash2 className="h-4 w-4"/>
+                                        <span className="sm:inline">Delete</span>
+                                    </Button>
+                                    <div className="flex gap-2">
+                                        <Button type="button" variant="outline" size="sm" onClick={onClose}>
+                                            Cancel
                                         </Button>
-                                        <div className="flex gap-2">
-                                            <Button type="button" variant="outline" size="sm" onClick={onClose}>
-                                                Cancel
-                                            </Button>
-                                            <Button type="submit" size="sm">
-                                                Update
-                                            </Button>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="flex-1"></div>
-                                        <div className="flex gap-2">
-                                            <Button type="button" variant="outline" size="sm" onClick={onClose}>
-                                                Cancel
-                                            </Button>
-                                            <Button type="submit" size="sm">
-                                                Create
-                                            </Button>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        </form>
-                    </Form>
+                                        <Button type="submit" size="sm" form="task-form">
+                                            Update
+                                        </Button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flex-1"></div>
+                                    <div className="flex gap-2">
+                                        <Button type="button" variant="outline" size="sm" onClick={onClose}>
+                                            Cancel
+                                        </Button>
+                                        <Button type="submit" size="sm" form="task-form">
+                                            Create
+                                        </Button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
                 </DialogContent>
             </Dialog>
 

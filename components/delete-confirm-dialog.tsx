@@ -35,15 +35,19 @@ export default function DeleteConfirmDialog({open, onOpenChange, onConfirm, task
         onConfirm()
 
         // Show toast with undo button using Sonner
-        toast.error("Task deleted", {
+        toast("Task deleted", {
             description: `"${taskName}" has been removed from your schedule.`,
+            className: "bg-background text-foreground border border-border",
+            descriptionClassName: "text-muted-foreground",
             action: {
                 label: "Undo",
                 onClick: () => {
                     const recovered = recoverLastDeleted()
                     if (recovered) {
-                        toast.success("Task restored", {
+                        toast("Task restored", {
                             description: `"${taskName}" has been restored to your schedule.`,
+                            className: "bg-background text-foreground border border-border",
+                            descriptionClassName: "text-muted-foreground",
                         })
                     }
                 },
@@ -63,7 +67,12 @@ export default function DeleteConfirmDialog({open, onOpenChange, onConfirm, task
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                    <AlertDialogAction
+                        onClick={handleDelete}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                        Delete
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

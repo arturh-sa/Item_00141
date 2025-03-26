@@ -33,7 +33,17 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <Header/>
             {children}
-            <Toaster position="bottom-right" closeButton richColors/>
+            <Toaster
+                position="bottom-right"
+                closeButton
+                theme="system"
+                toastOptions={{
+                    className: "bg-background text-foreground border border-border",
+                    descriptionClassName: "text-muted-foreground",
+                    actionButtonClassName: "bg-primary text-primary-foreground hover:bg-primary/90",
+                    cancelButtonClassName: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+                }}
+            />
         </ThemeProvider>
         </body>
         </html>

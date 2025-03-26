@@ -1,17 +1,44 @@
-import {toast} from "sonner"
+import {toast, type ToastT} from "sonner"
+
+// Custom toast styling options
+const toastOptions: Partial<ToastT> = {
+    className: "bg-background text-foreground border border-border",
+    descriptionClassName: "text-muted-foreground",
+    actionButtonClassName: "bg-primary text-primary-foreground hover:bg-primary/90",
+    cancelButtonClassName: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+    style: {
+        // Override any default Sonner styles if needed
+    },
+}
 
 export const showToast = {
-    success: (title: string, description?: string) => {
-        toast.success(title, {description})
+    success: (title: string, description?: string, options?: Partial<ToastT>) => {
+        toast(title, {
+            description,
+            ...toastOptions,
+            ...options,
+        })
     },
-    error: (title: string, description?: string) => {
-        toast.error(title, {description})
+    error: (title: string, description?: string, options?: Partial<ToastT>) => {
+        toast(title, {
+            description,
+            ...toastOptions,
+            ...options,
+        })
     },
-    info: (title: string, description?: string) => {
-        toast.info(title, {description})
+    info: (title: string, description?: string, options?: Partial<ToastT>) => {
+        toast(title, {
+            description,
+            ...toastOptions,
+            ...options,
+        })
     },
-    warning: (title: string, description?: string) => {
-        toast.warning(title, {description})
+    warning: (title: string, description?: string, options?: Partial<ToastT>) => {
+        toast(title, {
+            description,
+            ...toastOptions,
+            ...options,
+        })
     },
 }
 

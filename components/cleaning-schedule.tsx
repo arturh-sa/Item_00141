@@ -7,6 +7,7 @@ import {useSchedule} from "@/components/schedule-provider"
 import RoomFilter from "@/components/room-filter"
 import WeeklyView from "@/components/weekly-view"
 import TaskDialog from "@/components/task-dialog"
+import TaskSummary from "@/components/task-summary"
 import type {CleaningTask} from "@/types/schedule"
 
 export default function CleaningSchedule() {
@@ -35,6 +36,9 @@ export default function CleaningSchedule() {
 
     return (
         <div className="space-y-6">
+            {/* Add TaskSummary component */}
+            <TaskSummary/>
+
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <RoomFilter/>
                 <Button onClick={handleAddTask} className="flex items-center gap-2">

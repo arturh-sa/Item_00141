@@ -1,11 +1,11 @@
 "use client"
 
 import {Edit, Bell, BellOff} from "lucide-react"
-import {toast} from "sonner"
 import {Badge} from "@/components/ui/badge"
 import {Button} from "@/components/ui/button"
 import {Checkbox} from "@/components/ui/checkbox"
 import {Card, CardContent, CardFooter} from "@/components/ui/card"
+import {showToast} from "@/utils/toast-utils"
 import type {CleaningTask} from "@/types/schedule"
 
 interface TaskCardProps {
@@ -21,9 +21,7 @@ export default function TaskCard({task, onEdit, onToggleComplete}: TaskCardProps
         onToggleComplete()
 
         if (!task.completed) {
-            toast.success("Task completed", {
-                description: `"${task.name}" has been marked as completed.`,
-            })
+            showToast.success("Task completed", `"${task.name}" has been marked as completed.`)
         }
     }
 
